@@ -25,14 +25,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
+      - name: Build test image
         run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
-          else
-            docker build . --file Dockerfile
-          fi
+          docker build . --file Dockerfile --tag localtest
+
+      - name: Test using container as an executable
+        run: |
+          docker run --rm localtest
+          docker run --rm localtest "test saying this instead"
+
+      - name: Test using octocatsay and octocatthink in a shell
+        run: |
+          # octocatsay and octocatthink should be in the default PATH
+          docker run --rm --entrypoint /bin/sh localtest octocatsay "verify octocatsay works"
+          docker run --rm --entrypoint /bin/sh localtest octocatthink "verify octocatthink works"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
