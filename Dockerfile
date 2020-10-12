@@ -1,4 +1,5 @@
 FROM bash:4.4
 
-COPY bin ./
-ENTRYPOINT ["./octocatsay"]
+# Put octocatsay and octocatthink in path
+COPY bin /usr/local/bin/
+ENTRYPOINT ["octocatsay"]
