@@ -27,18 +27,17 @@ jobs:
 
       - name: Build test image
         run: |
-          docker build . --file Dockerfile --tag localtest
+          docker build . --file Dockerfile --tag test-image
 
       - name: Test using container as an executable
         run: |
-          docker run --rm localtest
-          docker run --rm localtest "test saying this instead"
+          docker run --rm test-image "Goodnight Gracie"
 
-      - name: Test using octocatsay and octocatthink in a shell
+      - name: Test using octocatsay and octocatthink
         run: |
           # octocatsay and octocatthink should be in the default PATH
-          docker run --rm --entrypoint /bin/sh localtest octocatsay "verify octocatsay works"
-          docker run --rm --entrypoint /bin/sh localtest octocatthink "verify octocatthink works"
+          docker run --rm --entrypoint octocatsay test-image "verify octocatsay works"
+          docker run --rm --entrypoint octocatthink test-image "verify octocatthink works"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
